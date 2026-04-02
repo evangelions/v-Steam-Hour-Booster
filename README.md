@@ -20,7 +20,8 @@ Install the required library: Open Command Prompt / Terminal in the folder where
 - Mobile Steam Guard codes seem to work best. Email codes sometimes give me sign-in errors.
 - Game App IDs are easy to find on the store page.
 *Example: https://store.steampowered.com/app/381210/Dead_by_Daylight/*
-      (The number 381210 in the URL is the App ID.)
+
+   (The number 381210 in the URL is the App ID.)
 
 That's it. Just leave the CMD/Terminal window open in the background.
 You can close Steam completely — the actual game doesn't need to be launched.
