@@ -12,7 +12,13 @@ Install the required library: Open Command Prompt / Terminal in the folder where
 - Now Run the program: You can double-click booster.py or run it from the terminal with: py booster.py
 - Follow the instructions in terminal: Login with your Steam username and password etc...
 
+**Feature**
+- Multiple game support boost a bunch at a time
+- saved username/password if desired
+- saved preset for games/hours to boost
+- working on auto log in and multiple accounts
 
+  
 **Useful Tips** 
 - Press Ctrl + C or close the terminal window to stop boosting at any time.
 - You can save your credentials so you don't have to type them every time (Steam Guard is still needed on first login).
