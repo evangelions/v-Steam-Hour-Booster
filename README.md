@@ -24,8 +24,11 @@ Install the required library: Open Command Prompt / Terminal in the folder where
    (The number 381210 in the URL is the App ID.)
 
 That's it. Just leave the CMD/Terminal window open in the background.
-You can close Steam completely — the actual game doesn't need to be launched.
-The script will keep farming playtime while you're busy or sleeping.ENJOY!
+You can close Steam completely — the actual game doesn't need to be launched either.
+The script will stay active while you're busy or sleeping. 
+
+# ENJOY!
+
 
 Discord: https://discord.gg/XjPKhvHBNH
 
