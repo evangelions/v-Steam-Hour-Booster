@@ -15,7 +15,7 @@ from steam.enums import EResult, EPersonaState
 CYAN = '\033[96m'
 GREEN = '\033[92m'
 YELLOW = '\033[93m'
-ORANGE = '\033[38;5;208m'  # for the popular games list
+ORANGE = '\033[38;5;208m'  
 DARK_BLUE = '\033[38;5;33m'
 WHITE = '\033[97m'
 RESET = '\033[0m'
@@ -44,7 +44,7 @@ def show_the_banner(logged_user=None):
         print(GREEN + f"   Logged in as: {logged_user}" + RESET)
         print("=" * 70)
 
-class MySteamFarmer:  #  i know the name is lame
+class MySteamFarmer:  #  i know the name is lame lol 
     def __init__(self):
         self.steam = SteamClient()  # main client, 
         self.is_logged_in = False
@@ -52,10 +52,10 @@ class MySteamFarmer:  #  i know the name is lame
         self.want_offline = False
         self.currently_farming = False
         self.config_path = "config.json"  # everything goes here
-        self.apps_im_farming = []  # list of appids currently boosting
+        self.apps_im_farming = []  # list of gameids currently boosting
         self.farm_started_at = None
 
-        # these event things are something, took me 2 hours to get right
+        # these event things are something, took me like 2 hours to get right
         @self.steam.on('logged_on')
         def handle_logged_on():
             print(GREEN + "[+] connected to steam account" + RESET)
