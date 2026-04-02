@@ -16,7 +16,8 @@ Install the required library: Open Command Prompt / Terminal in the folder where
 - Multiple game support boost a bunch at a time
 - saved username/password if desired
 - saved preset for games/hours to boost
-  (working on auto log in and multiple accounts)
+
+(working on auto log in and multiple accounts)
 
   
 **Useful Tips** 
