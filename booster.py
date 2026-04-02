@@ -17,7 +17,7 @@ WHITE = '\033[97m'
 RESET = '\033[0m'
 
 def clear_term():
-    # old way but it just works on both win and linux
+    
     os.system('cls' if os.name == 'nt' else 'clear')
 
 def show_the_banner(logged_user=None):
@@ -40,14 +40,14 @@ def show_the_banner(logged_user=None):
         print(GREEN + f"   Logged in as: {logged_user}" + RESET)
         print("=" * 70)
 
-class MySteamFarmer:  #  i know the name is lame
+class MySteamFarmer:  #  i know the name is lamee lol
     def __init__(self):
-        self.steam = SteamClient()  # main client, 
+        self.steam = SteamClient()  # main client 
         self.is_logged_in = False
         self.current_user = None
         self.want_offline = False
         self.currently_farming = False
-        self.config_path = "config.json"  # everything goes here
+        self.config_path = "config.json"  # prestes and credentials goes here
         self.apps_im_farming = []  # list of gaameids currently boosting
         self.farm_started_at = None
 
@@ -85,14 +85,14 @@ class MySteamFarmer:  #  i know the name is lame
             with open(self.config_path, 'r', encoding='utf-8') as f:
                 return json.load(f)
         except:
-            # sometimes config gets corrupted, just ignore
+            # sometimes config gets corrupted  (ignore 4 noiw)
             return None
 
     def _save_my_config(self, username, password=None, should_save_pw=False):
         cfg = self._load_my_config() or {}
         cfg['username'] = username
         if should_save_pw and password:
-            # base64 is enough for personal files as info is not saved elsewhere
+            # base64 is enough for personal use  info is not saved elsewhere
             cfg['password'] = base64.b64encode(password.encode('utf-8')).decode('utf-8')
         try:
             with open(self.config_path, 'w', encoding='utf-8') as f:
@@ -121,7 +121,7 @@ class MySteamFarmer:  #  i know the name is lame
             return None
         return cfg['presets']
 
-    def get_game_name(self, appid):  # for steam store, sometimes slow but ok
+    def get_game_name(self, appid):  # for steam store, sometimes slowwwwww
         try:
             resp = requests.get(f"https://store.steampowered.com/api/appdetails?appids={appid}", timeout=5)
             if resp.ok:
@@ -130,7 +130,7 @@ class MySteamFarmer:  #  i know the name is lame
                     return data[str(appid)]['data'].get('name', f'App {appid}')
             return f'App {appid}'
         except:
-            return f'App {appid}'  # fallback, 
+            return f'App {appid}'   
 
     def do_login(self, stay_offline=False):
         self.want_offline = stay_offline
@@ -174,7 +174,7 @@ class MySteamFarmer:  #  i know the name is lame
             else:
                 pw_to_use = input(DARK_BLUE + "Password: " + RESET)
 
-            # only ask to save if it's new creds
+            # only ask to save if it's new credentials
             if not cfg or cfg.get('username') != self.current_user or 'password' not in cfg:
                 if input(YELLOW + "\n[?] save username & password for next time? (Y/N): " + RESET).strip().lower() == 'y':
                     self._save_my_config(self.current_user, pw_to_use, True)
@@ -191,7 +191,7 @@ class MySteamFarmer:  #  i know the name is lame
             if result == EResult.OK:
                 print(GREEN + "[+] login successful!" + RESET)
                 self.is_logged_in = True
-                time.sleep(1.5)  # give steam a second 
+                time.sleep(1.5)  # give steam  second 
 
                 if stay_offline:
                     self.steam.change_status(persona_state=EPersonaState.Offline)
@@ -255,7 +255,7 @@ class MySteamFarmer:  #  i know the name is lame
 
         print(YELLOW + "[*] loading..." + RESET)
         self.steam.games_played(app_ids)
-        time.sleep(2)  # small pause so steam registers 
+        time.sleep(2)  # small pause so steam can registers 
         print(GREEN + "[+] farming is live!" + RESET)
 
         heartbeat_count = 0
@@ -286,7 +286,7 @@ class MySteamFarmer:  #  i know the name is lame
                     heartbeat_count += 1
 
                 if end_time and now >= end_time:
-                    break  # done with limited time
+                    break  # done with limit time
 
         except KeyboardInterrupt:
             print(GREEN + "\n\n[!] farming stopped by you" + RESET)
@@ -312,7 +312,7 @@ class MySteamFarmer:  #  i know the name is lame
                 self.steam.logout()
             print(GREEN + "[+] disconnected cleanly" + RESET)
 
-# ==================== menu ====================
+# ========== menu stuff =================
 
 def choose_games(farmer):
     print("\n" + CYAN + "="*60 + RESET)
