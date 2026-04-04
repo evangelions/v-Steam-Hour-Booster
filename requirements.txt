@@ -1,0 +1,2 @@
+requirements.txtrequests
+steam[client]
