@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # my steam hour booster - been using this for months to farm cards on my alts
+# wrote it myself after the official one got patched lol
 # last tweaked: april 2026 because windows was being weird with clears
 
 import sys
@@ -11,11 +12,13 @@ import base64
 from steam.client import SteamClient
 from steam.enums import EResult, EPersonaState
 
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
 # these colors look decent in my terminal, stole the codes from an old script
 CYAN = '\033[96m'
 GREEN = '\033[92m'
 YELLOW = '\033[93m'
-ORANGE = '\033[38;5;208m'  
+ORANGE = '\033[38;5;208m'  # for the popular games list
 DARK_BLUE = '\033[38;5;33m'
 WHITE = '\033[97m'
 RESET = '\033[0m'
@@ -44,7 +47,7 @@ def show_the_banner(logged_user=None):
         print(GREEN + f"   Logged in as: {logged_user}" + RESET)
         print("=" * 70)
 
-class MySteamFarmer:  #  i know the name is lame lol 
+class MySteamFarmer:  #  i know the name is lame
     def __init__(self):
         self.steam = SteamClient()  # main client, 
         self.is_logged_in = False
@@ -52,10 +55,10 @@ class MySteamFarmer:  #  i know the name is lame lol
         self.want_offline = False
         self.currently_farming = False
         self.config_path = "config.json"  # everything goes here
-        self.apps_im_farming = []  # list of gameids currently boosting
+        self.apps_im_farming = []  # list of appids currently boosting
         self.farm_started_at = None
 
-        # these event things are something, took me like 2 hours to get right
+        # these event things are something, took me 2 hours to get right
         @self.steam.on('logged_on')
         def handle_logged_on():
             print(GREEN + "[+] connected to steam account" + RESET)
