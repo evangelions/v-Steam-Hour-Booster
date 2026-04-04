@@ -5,10 +5,16 @@ Use at your own risk!
 
 **How to Use** 
 - Make sure you have Python installed (Python 3.8 or higher recommended)
-Install the required library: Open Command Prompt / Terminal in the folder where the script is saved. 
-(Or In the Folder, click the address bar at the top, type CMD and hit Enter)
+    Extract the .zip and delete zip folder.
+    Open extracted folder "Steam-Booster-By-V"
 
-- Then run this command: pip install steam
+  
+**Install the required library:**
+
+Open Command Prompt / Terminal in the folder where the script is saved. 
+ In the Folder click the search bar at the top, type CMD and hit Enter
+
+- Then run this command: py -m pip install -r requirements.txt
 - Now Run the program: You can double-click booster.py or run it from the terminal with: py booster.py
 - Follow the instructions in terminal: Login with your Steam username and password etc...
 
@@ -21,12 +27,14 @@ Install the required library: Open Command Prompt / Terminal in the folder where
 
   
 **Useful Tips** 
-- Press Ctrl + C or close the terminal window to stop boosting at any time.
-- You can save your credentials so you don't have to type them every time (Steam Guard is still needed on first login).
-- You can save presets for your favorite game combinations and hours.
-- Mobile Steam Guard codes seem to work best. Email codes sometimes give me sign-in errors.
-- Game App IDs are easy to find on the store page.
-*Example: https://store.steampowered.com/app/381210/Dead_by_Daylight/*
+
+• Press Ctrl + C or close terminal to stop boosting at any time.
+• You can save your credentials so you don't have to type them every time. (except steam guard code)
+• You can save presets for your favorite games/hours.
+• mobile steam guard codes seem to work best (idk why) email sometimes give me sign in errors
+• game IDs can be found on the games store page
+     *(example: https://store.steampowered.com/app/381210/Dead_by_Daylight)*
+                              
 
    (The number 381210 in the URL is the App ID.)
 
