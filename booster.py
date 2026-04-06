@@ -1,31 +1,25 @@
 #!/usr/bin/env python3
 # this is my steam hour booster - been using this for months to farm cards on my alts
-# wrote by yours truly a little help fropm you know who. after i accidently deleted the old one... smh
-# last tweaked: april 2026 - i still occasionly edit this script and test new things like every week
-# (some detectors keep calling it ai code but whatever, ive been tweaking this mess myself forever)
+# wrote by yours truly maybeee a little help from you know who in pycharm. after i accidently deleted the old one... smh
+# last updated: april/5th/2026 - i still occasionly edit this script and test new things like every week
+# pls msg me in the server below with suggestions or anything that can improve thsis script ty  
 
-import sys
-import os
-import json
-import requests
-import time
-import base64
+import sys, os, json, requests, time, base64
 from steam.client import SteamClient
 from steam.enums import EResult, EPersonaState
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-# these colors look decent in my terminal, stole the codes from an old script i had laying around
-CYAN = '\033[96m'     # idk cool color for splitters i guess
-GREEN = '\033[92m'   # confirmations and stuff
-YELLOW = '\033[93m'   # for info messages
-ORANGE = '\033[38;5;208m'  # for the popular games list
-DARK_BLUE = '\033[38;5;33m'  # text required messages 
-WHITE = '\033[97m'  
+
+CYAN = '\033[96m'
+GREEN = '\033[92m'
+YELLOW = '\033[93m'
+ORANGE = '\033[38;5;208m'
+DARK_BLUE = '\033[38;5;33m'
+WHITE = '\033[97m'
 RESET = '\033[0m'
 
 def clear_term():
-    # old way but it just works on both win and linux (tried subprocess once and it sucked)
     os.system('cls' if os.name == 'nt' else 'clear')
 
 def show_the_banner(logged_user=None):
@@ -48,19 +42,18 @@ def show_the_banner(logged_user=None):
         print(GREEN + f"   Logged in as: {logged_user}" + RESET)
         print("=" * 70)
 
-class MySteamFarmer:  #  i know i know.. its basic asf but oh well
+class MySteamFarmer:  
     def __init__(self):
-        self.steam = SteamClient()  # main client
+        self.steam = SteamClient()  
         self.is_logged_in = False
         self.current_user = None
         self.want_offline = False
         self.currently_farming = False
-        self.config_path = "config.json"  # everything goes here
-        self.apps_im_farming = []  # list of appids currently boosting
+        self.config_path = "config.json"  
+        self.apps_im_farming = []  
         self.farm_started_at = None
         self.display_name = None
 
-        # these event things are something, took me 2 years to get right (callbacks inside init is weird but steam lib likes it this way)
         @self.steam.on('logged_on')
         def handle_logged_on():
             print(GREEN + "[+] connected to steam account" + RESET)
@@ -77,38 +70,31 @@ class MySteamFarmer:  #  i know i know.. its basic asf but oh well
         def handle_new_key(key):
             cfg = self._load_my_config() or {}
             if self.current_user:
-                if 'login_keys' not in cfg:
-                    cfg['login_keys'] = {}
+                if 'login_keys' not in cfg: cfg['login_keys'] = {}
                 cfg['login_keys'][self.current_user] = key
                 try:
                     with open(self.config_path, 'w', encoding='utf-8') as f:
                         json.dump(cfg, f, indent=2)
                     print(GREEN + "[+] saved session key (no guard next time)" + RESET)
-                except Exception:
-                    pass  # meh, not critical
+                except: pass  
 
     def _load_my_config(self):
-        if not os.path.exists(self.config_path):
-            return None
+        if not os.path.exists(self.config_path): return None
         try:
             with open(self.config_path, 'r', encoding='utf-8') as f:
                 return json.load(f)
-        except:
-            # sometimes config gets corrupted, just ignore (happened twice already)
-            return None
+        except: return None
 
     def _save_my_config(self, username, password=None, should_save_pw=False):
         cfg = self._load_my_config() or {}
         cfg['username'] = username
         if should_save_pw and password:
-            # base64 is enough, nothing fancy
             cfg['password'] = base64.b64encode(password.encode('utf-8')).decode('utf-8')
         try:
             with open(self.config_path, 'w', encoding='utf-8') as f:
                 json.dump(cfg, f, indent=2)
             return True
-        except:
-            return False
+        except: return False
 
     def save_preset(self, preset_name, appids, hours):
         cfg = self._load_my_config() or {}
@@ -130,7 +116,7 @@ class MySteamFarmer:  #  i know i know.. its basic asf but oh well
             return None
         return cfg['presets']
 
-    def get_game_name(self, appid):  # this hits steam store, sometimes slow but ok
+    def get_game_name(self, appid): 
         try:
             resp = requests.get(f"https://store.steampowered.com/api/appdetails?appids={appid}", timeout=5)
             if resp.ok:
@@ -139,9 +125,9 @@ class MySteamFarmer:  #  i know i know.. its basic asf but oh well
                     return data[str(appid)]['data'].get('name', f'App {appid}')
             return f'App {appid}'
         except:
-            return f'App {appid}'  # fallback, better than nothing
+            return f'App {appid}'  
 
-    def login_account(self, stay_offline=False):  # used to be called do_login but whatever
+    def login_account(self, stay_offline=False):
         self.want_offline = stay_offline
         show_the_banner()
 
@@ -179,12 +165,10 @@ class MySteamFarmer:  #  i know i know.. its basic asf but oh well
             self.current_user = input(DARK_BLUE + "\nUsername: " + RESET)
             pw_to_use = input(DARK_BLUE + "Password: " + RESET)
 
-        # check for saved session key   # i still need to work on this
         if cfg and 'login_keys' in cfg and self.current_user in cfg['login_keys']:
             saved_key = cfg['login_keys'][self.current_user]
             print(YELLOW + "[*] found saved session - quick login" + RESET)
 
-        # only ask to save if it's new creds
         if not saved_key and (not cfg or cfg.get('username') != self.current_user or 'password' not in cfg):
             if input(YELLOW + "\n[?] save username & password for next time? (Y/N): " + RESET).strip().lower() == 'y':
                 self._save_my_config(self.current_user, pw_to_use, True)
@@ -201,7 +185,7 @@ class MySteamFarmer:  #  i know i know.. its basic asf but oh well
             if result == EResult.OK:
                 print(GREEN + "[+] login successful!" + RESET)
                 self.is_logged_in = True
-                time.sleep(1.5)  # give steam a second to breathe (trust me it needs it)
+                time.sleep(1.5)
 
                 if stay_offline:
                     self.steam.change_status(persona_state=EPersonaState.Offline)
@@ -217,11 +201,11 @@ class MySteamFarmer:  #  i know i know.. its basic asf but oh well
             else:
                 print(YELLOW + f"[!] login failed with code: {result}" + RESET)
                 return False
-        except Exception as e:  # steam lib throws random stuff, broad catch is safer
+        except Exception as e:  
             print(YELLOW + f"[!] login error (this happens sometimes): {e}" + RESET)
             return False
 
-    def check_game_details(self, app_ids):  # used to be verify_the_games, now sounds more like me
+    def check_game_details(self, app_ids):  
         print("\n" + CYAN + "="*60 + RESET)
         print(CYAN + "CHECKING GAME INFO" + RESET)
         print(CYAN + "="*60 + RESET)
@@ -235,11 +219,11 @@ class MySteamFarmer:  #  i know i know.. its basic asf but oh well
 
         print("\n" + CYAN + "="*60 + RESET)
         for aid, n in game_names.items():
-            print(f" {ORANGE} {aid:8} - {n}" + RESET )
+            print(f" {ORANGE}{aid:8} - {n}" + RESET)
 
         return game_names
 
-    def start_boost(self, app_ids, game_info, hours):  # used to be start_farming, this feels more natural
+    def start_boost(self, app_ids, game_info, hours):  
         if not self.is_logged_in:
             print(YELLOW + "[!] not logged in, can't farm" + RESET)
             return
@@ -249,15 +233,15 @@ class MySteamFarmer:  #  i know i know.. its basic asf but oh well
         print(CYAN + "="*60 + RESET)
         print(f"User     : {GREEN}{self.display_name}{RESET}")
         print(f"Status   : {GREEN}{'OFFLINE' if self.want_offline else 'ONLINE'}{RESET}")
-        print(f"Games    : {GREEN}{len(app_ids)}" + RESET)
+        print(f"Games    : {GREEN}{len(app_ids)}{RESET}")
         if hours >= 999999:
-            print("Duration : Unlimited (let it run forever)" )
+            print("Duration : Unlimited (let it run forever)")
         else:
             print(f"Duration : {GREEN}{hours} hours")
         print(CYAN + "="*60 + RESET)
 
         for aid in app_ids:
-            print(f" {ORANGE} • {game_info.get(aid, f'App {aid}')}" + RESET)
+            print(f" {ORANGE}• {game_info.get(aid, f'App {aid}')}" + RESET)
 
         print(YELLOW + "\n[i] press CTRL + C to end boost" + RESET)
         print(CYAN + "-"*60 + RESET + "\n")
@@ -268,7 +252,7 @@ class MySteamFarmer:  #  i know i know.. its basic asf but oh well
 
         print(YELLOW + "[*] loading..." + RESET)
         self.steam.games_played(app_ids)
-        time.sleep(2)  # small pause so steam registers it (learned the hard way)
+        time.sleep(2)
         print(GREEN + "[+] SUCCESS" + RESET)
 
         heartbeat_count = 0
@@ -292,14 +276,14 @@ class MySteamFarmer:  #  i know i know.. its basic asf but oh well
                 print(f"\r{GREEN}{status_line}{RESET}", end='', flush=True)
 
                 if now - last_heartbeat >= 120:
-                    self.steam.games_played(app_ids)  # this 120s heartbeat is the sweet spot i found after testing for weeks
+                    self.steam.games_played(app_ids)
                     if self.want_offline:
                         self.steam.change_status(persona_state=EPersonaState.Offline)
                     last_heartbeat = now
                     heartbeat_count += 1
 
                 if end_time and now >= end_time:
-                    break  # done with limited time
+                    break
 
         except KeyboardInterrupt:
             print(GREEN + "\n\n[!] boost stopped by you" + RESET)
@@ -325,9 +309,8 @@ class MySteamFarmer:  #  i know i know.. its basic asf but oh well
                 self.steam.logout()
             print(GREEN + "[+] disconnected cleanly" + RESET)
 
-# ==================== the menu part (kept it simple) ====================
 
-def pick_games(farmer):  # used to be choose_games, now its just me picking stuff
+def pick_games(farmer):  
     print("\n" + CYAN + "="*60 + RESET)
     print(CYAN + "SELECT GAMES TO BOOST" + RESET)
     print(CYAN + "="*60 + RESET)
@@ -336,7 +319,7 @@ def pick_games(farmer):  # used to be choose_games, now its just me picking stuf
     if presets:
         print(YELLOW + "\n[*] your saved presets:" + RESET)
         for i, (name, data) in enumerate(presets.items(), 1):
-            print(f" {ORANGE} {i}. {name}: {data['app_ids']} ({data['duration']}h)")
+            print(f" {ORANGE}{i}. {name}: {data['app_ids']} ({data['duration']}h)")
 
         choice = input(WHITE + "\nUse a preset? (enter preset number or 'n' for none): " + RESET).strip()
         if choice.isdigit():
