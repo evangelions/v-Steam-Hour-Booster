@@ -2,7 +2,7 @@
 # this is my steam hour booster - been using this for months to farm cards on my alts
 # wrote by yours truly maybeee a little help from you know who in pycharm. after i accidently deleted the old one... smh
 # last updated: april/5th/2026 - i still occasionly edit this script and test new things like every week
-# pls msg me in the server below with suggestions or anything that can improve thsis script ty  
+# pls msg me in the server below with suggestions or anything that can improve thsis script tyy
 
 import sys, os, json, requests, time, base64
 from steam.client import SteamClient
